@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth.decorators import user_passes_test, permission_required
+from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import permission_required
 
 from .models import Book, Library, UserProfile
 
@@ -93,10 +94,10 @@ def member_view(request):
 
 
 # ---------------------------------------------------
-#            CUSTOM PERMISSION-BASED CRUD
+#            PERMISSION-BASED CRUD
 # ---------------------------------------------------
 
-@permission_required('relationship_app.can_add_book', raise_exception=True)
+@permission_required('relationship_app.add_book')
 def add_book(request):
     if request.method == "POST":
         title = request.POST.get("title")
@@ -108,7 +109,7 @@ def add_book(request):
     return render(request, 'relationship_app/add_book.html')
 
 
-@permission_required('relationship_app.can_change_book', raise_exception=True)
+@permission_required('relationship_app.change_book')
 def edit_book(request, pk):
     book = get_object_or_404(Book, pk=pk)
 
@@ -121,7 +122,7 @@ def edit_book(request, pk):
     return render(request, 'relationship_app/edit_book.html', {"book": book})
 
 
-@permission_required('relationship_app.can_delete_book', raise_exception=True)
+@permission_required('relationship_app.delete_book')
 def delete_book(request, pk):
     book = get_object_or_404(Book, pk=pk)
 
