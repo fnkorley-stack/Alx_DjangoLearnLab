@@ -1,9 +1,16 @@
 from django.urls import path
-from .views import list_books              # <-- REQUIRED BY THE CHECKER
-from .views import LibraryDetailView       # (optional but clean)
-from . import views
+from .views import list_books, LibraryDetailView
+from .views import register, login_view, logout_view
 
 urlpatterns = [
-    path("books/", list_books, name="list_books"),
-    path("library/<int:pk>/", LibraryDetailView.as_view(), name="library_detail"),
+    # Function-based view for listing books
+    path('books/', list_books, name='list_books'),
+
+    # Class-based view for library details
+    path('library/<int:pk>/', LibraryDetailView.as_view(), name='library_detail'),
+
+    # Authentication routes
+    path('register/', register, name='register'),
+    path('login/', login_view, name='login'),
+    path('logout/', logout_view, name='logout'),
 ]
