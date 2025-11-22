@@ -16,19 +16,23 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
+# ------------------------------
+# Basic Security Settings
+# ------------------------------
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-my)k8-n3icz%j5ju=oy=qy+l(rs$_q)0cr2tfy6r^dj@(f8whm'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False  # Must be False in production
 
-ALLOWED_HOSTS = []
+# Add your domain(s) for production
+ALLOWED_HOSTS = ['yourdomain.com', 'www.yourdomain.com']
 
 
+# ------------------------------
 # Application definition
+# ------------------------------
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -41,21 +45,29 @@ INSTALLED_APPS = [
     'relationship_app',
     'users',
 ]
+
 AUTH_USER_MODEL = 'users.CustomUser'
 
 # Media files configuration
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+
+# ------------------------------
+# Middleware
+# ------------------------------
+
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "django.middleware.security.SecurityMiddleware",
+    "relationship_app.security_middleware.SecurityHeadersMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
 
 ROOT_URLCONF = 'LibraryProject.urls'
 
@@ -77,9 +89,10 @@ TEMPLATES = [
 WSGI_APPLICATION = 'LibraryProject.wsgi.application'
 
 
+# ------------------------------
 # Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
+# ------------------------------
+# Using SQLite for development; replace with production DB as needed
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -88,47 +101,77 @@ DATABASES = {
 }
 
 
-# Password validation
-# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
-
+# ------------------------------
+# Password Validation
+# ------------------------------
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',},
 ]
 
 
+# ------------------------------
 # Internationalization
-# https://docs.djangoproject.com/en/5.2/topics/i18n/
-
+# ------------------------------
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.2/howto/static-files/
-
+# ------------------------------
+# Static files
+# ------------------------------
 STATIC_URL = 'static/'
 
 # Default primary key field type
-# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
+# ------------------------------
+# Security Enhancements
+# ------------------------------
+
+# Browser security
+SECURE_BROWSER_XSS_FILTER = True          # Enable browser XSS filter
+X_FRAME_OPTIONS = 'DENY'                  # Prevent clickjacking
+SECURE_CONTENT_TYPE_NOSNIFF = True        # Prevent MIME type sniffing
+
+# Cookies security
+CSRF_COOKIE_SECURE = True                 # Only send CSRF cookie over HTTPS
+SESSION_COOKIE_SECURE = True              # Only send session cookie over HTTPS
+
+# HTTPS / SSL settings
+SECURE_SSL_REDIRECT = True                # Redirect all HTTP requests to HTTPS
+SECURE_HSTS_SECONDS = 31536000            # HSTS: 1 year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True     # Apply HSTS to all subdomains
+SECURE_HSTS_PRELOAD = True                # Enable HSTS preloading
+
+# Optional security
+SECURE_REFERRER_POLICY = 'no-referrer-when-downgrade'
+
+
+# ------------------------------
+# Content Security Policy (CSP)
+# ------------------------------
+CSP_DEFAULT_SRC = ("'self'",)
+CSP_SCRIPT_SRC = ("'self'",)
+CSP_STYLE_SRC = ("'self'", 'https://fonts.googleapis.com')
+
+
+# Security Headers
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = "DENY"
+
+# HTTPS + Secure Cookies
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+CSP_DEFAULT_SRC = ("'self'",)
+
+# ------------------------------
 # Checker requirement - do not remove
 # bookshelf.CustomUser
-
