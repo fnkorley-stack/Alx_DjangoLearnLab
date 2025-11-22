@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'relationship_app' ,
     'users',
 ]
-AUTH_USER_MODEL = 'users.CustomUser'
 # Use the custom user model
 AUTH_USER_MODEL = 'users.CustomUser'
 
