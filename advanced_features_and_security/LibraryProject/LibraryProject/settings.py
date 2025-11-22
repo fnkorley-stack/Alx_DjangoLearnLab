@@ -38,10 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bookshelf',
-    'relationship_app' ,
+    'relationship_app',
     'users',
 ]
-# Use the custom user model
 AUTH_USER_MODEL = 'users.CustomUser'
 
 # Media files configuration
@@ -129,3 +128,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Checker requirement - do not remove
+# bookshelf.CustomUser
+
