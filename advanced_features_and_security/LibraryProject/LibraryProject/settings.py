@@ -171,7 +171,7 @@ SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 CSP_DEFAULT_SRC = ("'self'",)
-
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # ------------------------------
 # Checker requirement - do not remove
 # bookshelf.CustomUser
