@@ -26,10 +26,9 @@ SECRET_KEY = 'django-insecure-4@=*)s7m6!9f8pd3v6v&&o7m+5mq&z)uxd&h&b4zk6t+idd@ns
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
-
 # Application definition
 
+# Added for DRF token authentication
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -38,9 +37,19 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'rest_framework', 
-    'api',              
+    'rest_framework',
+    'rest_framework.authtoken',
+    'api',             
 ]
+# DRF authentication and permission settings
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ],
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
