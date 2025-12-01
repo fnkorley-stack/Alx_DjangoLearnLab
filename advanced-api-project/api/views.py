@@ -1,91 +1,54 @@
-from django.shortcuts import get_object_or_404
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from django.urls import reverse_lazy
-
 from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
-
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from .models import Author, Book
 from .serializers import AuthorSerializer, BookSerializer
 
 
-# ------------------------------
-# Django Class-Based Views (Required by Checker)
-# ------------------------------
+# -----------------------
+# BOOK VIEWS
+# -----------------------
 
-class AuthorListView(ListView):
-    model = Author
-    template_name = "author_list.html"
-    context_object_name = "authors"
-
-
-class AuthorDetailView(DetailView):
-    model = Author
-    template_name = "author_detail.html"
-    context_object_name = "author"
+class BookListView(ListAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
-class AuthorCreateView(CreateView):
-    model = Author
-    fields = ["name"]
-    template_name = "author_form.html"
-    success_url = reverse_lazy("author-list")
+class BookDetailView(RetrieveAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
-class AuthorUpdateView(UpdateView):
-    model = Author
-    fields = ["name"]
-    template_name = "author_form.html"
-    success_url = reverse_lazy("author-list")
+class BookCreateView(CreateAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    permission_classes = [IsAuthenticated]
 
 
-class AuthorDeleteView(DeleteView):
-    model = Author
-    template_name = "author_confirm_delete.html"
-    success_url = reverse_lazy("author-list")
+class BookUpdateView(UpdateAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    permission_classes = [IsAuthenticated]
 
 
-# ------------------------------
-# DRF API Views With Permission Classes
-# ------------------------------
+class BookDeleteView(DestroyAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    permission_classes = [IsAuthenticated]
 
-class AuthorListAPI(ListAPIView):
+
+# -----------------------
+# AUTHOR VIEWS
+# -----------------------
+
+class AuthorListView(ListAPIView):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
-class AuthorDetailAPI(RetrieveAPIView):
+class AuthorDetailView(RetrieveAPIView):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
-    permission_classes = [IsAuthenticated]
-
-
-class BookListAPI(ListAPIView):
-    queryset = Book.objects.all()
-    serializer_class = BookSerializer
-    permission_classes = [IsAuthenticated]
-
-
-class BookDetailAPI(RetrieveAPIView):
-    queryset = Book.objects.all()
-    serializer_class = BookSerializer
-    permission_classes = [IsAuthenticated]
-
-
-class BookCreateAPI(CreateAPIView):
-    queryset = Book.objects.all()
-    serializer_class = BookSerializer
-    permission_classes = [IsAdminUser]
-
-
-class BookUpdateAPI(UpdateAPIView):
-    queryset = Book.objects.all()
-    serializer_class = BookSerializer
-    permission_classes = [IsAdminUser]
-
-
-class BookDeleteAPI(DestroyAPIView):
-    queryset = Book.objects.all()
-    serializer_class = BookSerializer
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAuthenticatedOrReadOnly]
