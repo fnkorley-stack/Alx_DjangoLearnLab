@@ -1,0 +1,10 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+<h1>Search Results</h1>
+
+{% for post in posts %}
+    <p><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></p>
+{% empty %}
+    <p>No matching posts found.</p>
+{% endfor %}
+{% endblock %}
